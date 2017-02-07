@@ -57,8 +57,8 @@
             <p>Documentation for this library can be found <a href="https://github.com/darkwhispering/facebook-sdk-codeigniter" target="_blank">here</a>, and documentation about Facebook PHP SDK v5 can be found <a href="https://developers.facebook.com/docs/php/gettingstarted/" target="_blank">here</a>.</p>
 
             <div class="examples">
-                <a href="example/web_login" class="web">Redirect Login<br/>Example</a>
-                <a href="example/js_login" class="js">Javascript Login<br/>Example</a>
+                <a href="<?php echo site_url('example/web_login');?>" class="web">Redirect Login<br/>Example</a>
+                <a href="<?php echo site_url('example/js_login');?>" class="js">Javascript Login<br/>Example</a>
             </div>
 
 

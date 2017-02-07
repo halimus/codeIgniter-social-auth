@@ -69,7 +69,8 @@ class Example extends CI_Controller {
      */
     public function logout() {
         $this->facebook->destroy_session();
-        redirect('example/web_login', redirect);
+        //redirect('example/web_login', redirect);
+        redirect('example/js_login', redirect);
     }
 
 }

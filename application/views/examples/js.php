@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Facebook PHP SDK for CodeIgniter - Javascript SDK login example</title>
-
         <style>
             body {
                 padding: 0;
@@ -81,7 +80,7 @@
         <div class="login">
             <button>Login</button>
         </div>
-
+        
         <div class="form">
             <form class="post-to-wall">
                 <textarea name="message" placeholder="Type some text here and submit to post to your wall"></textarea>
@@ -91,13 +90,21 @@
 
         <p class="note"><i>Note: You can publish text posts to a users wall using only the Javascript SDK. This is ONLY an example on how the Javascript SDK can work togheter with the PHP SDK to publish and/or read information and content.</i></p>
 
+        <br>
+        <div class="logout">
+            <p>
+                <a href="#">Logout</a>
+            </p>
+        </div>
 
     </div>
 
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script>var base_url = '<?php echo base_url();?>';</script>
     <script>
-        // Initiate Facebook JS SDK
+        /*
+         * Initiate Facebook JS SDK
+         */
         window.fbAsyncInit = function () {
             FB.init({
                 appId: '<?php echo $this->config->item('facebook_app_id'); ?>', // Your app id
@@ -111,25 +118,30 @@
                 loginCheck(response);
             });
         };
-        // Check login status
-        function statusCheck(response)
-        {
+        /*
+        * Check login status
+         */
+        function statusCheck(response){
             console.log('statusCheck', response.status);
-            if (response.status === 'connected')
-            {
+            if (response.status === 'connected'){
+                getUser();
                 $('.login').hide();
+                $('.logout').show();
                 $('.form').fadeIn();
-            } else if (response.status === 'not_authorized')
-            {
+               
+            } 
+            else if (response.status === 'not_authorized'){
                 // User logged into facebook, but not to our app.
-            } else
-            {
+            } 
+            else{
                 // User not logged into Facebook.
             }
         }
-        // Get login status
-        function loginCheck()
-        {
+        
+        /*
+        * Get login status
+         */
+        function loginCheck(){
             FB.getLoginStatus(function (response) {
                 console.log('loginCheck', response);
                 statusCheck(response);
@@ -137,12 +149,15 @@
         }
         // Here we run a very simple test of the Graph API after login is
         // successful.  See statusChangeCallback() for when this call is made.
-        function getUser()
-        {
+        function getUser(){
             FB.api('/me', function (response) {
                 console.log('getUser', response);
             });
         }
+        
+        /*
+        * 
+         */
         $(function () {
             // Trigger login
             $('.login').on('click', 'button', function () {
@@ -150,6 +165,7 @@
                     loginCheck();
                 }, {scope: '<?php echo implode(",", $this->config->item('facebook_permissions')); ?>'});
             });
+            
             $('.form').on('submit', '.post-to-wall', function (e) {
                 e.preventDefault();
                 var formdata = $(this).serialize();
