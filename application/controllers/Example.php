@@ -52,6 +52,9 @@ class Example extends CI_Controller {
      */
     public function post() {
         header('Content-Type: application/json');
+//        $result = $this->facebook->request(
+//                'post', '/me/feed', ['message' => $this->input->post('message')]
+//        );
         $result = $this->facebook->request(
                 'post', '/me/feed', ['message' => $this->input->post('message')]
         );

@@ -95,6 +95,7 @@
     </div>
 
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script>var base_url = '<?php echo base_url();?>';</script>
     <script>
         // Initiate Facebook JS SDK
         window.fbAsyncInit = function () {
@@ -153,7 +154,7 @@
                 e.preventDefault();
                 var formdata = $(this).serialize();
                 $.ajax({
-                    url: '/example/post',
+                    url: base_url+'/example/post',
                     data: formdata,
                     type: 'POST',
                     dataType: 'json',
