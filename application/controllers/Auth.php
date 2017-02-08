@@ -18,33 +18,39 @@ class Auth extends CI_Controller {
      *
      */
     public function index() {
-        
-        
+        $data['title'] = 'Login Page';
+
         // Check if user is logged in
         if ($this->facebook->is_authenticated()) {
-            //die('yes');
-            // User logged in, get user details
-            $user = $this->facebook->request('get', '/me?fields=id,name,email');
+            //User logged in, get user details
+            $user = $this->facebook->request('get', '/me?fields=id,name,email,picture');
             if (!isset($user['error'])) {
                 $data['user'] = $user;
-                print_r($user);
-                echo 'yess';
-                //exit;
-            }
-            else{
-                dei('not login');
+                //print_r($user);
             }
         }
         else{
-            echo 'noo';
+            //echo 'not authenticated';
         }
         
         
-        $this->load->view('includes/header');
-        $this->load->view('auth/login');
+        $this->load->view('includes/header', $data);
+        $this->load->view('auth/login_js');
         $this->load->view('includes/footer'); 
     }
     
+    
+    
+    /**
+     *
+     */
+    public function logout_js() {
+        $reponse = '';
+        if ($this->facebook->is_authenticated()) {
+            $this->facebook->destroy_session();
+        }
+        echo json_encode($reponse);
+    }
     
     /**
      *
