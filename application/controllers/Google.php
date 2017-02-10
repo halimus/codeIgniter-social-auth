@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User_Authentication extends CI_Controller {
+class Google extends CI_Controller {
 
     /*
      * http://www.codexworld.com/login-with-google-account-in-codeigniter/
@@ -22,9 +22,26 @@ class User_Authentication extends CI_Controller {
         include_once APPPATH . "libraries/google-api-php-client/contrib/Google_Oauth2Service.php";
 
         // Google Project API Credentials
-        $clientId = 'Insert Google Client ID';
-        $clientSecret = 'Insert Google Client secret';
+        $clientId = '415940856583-31ecmf41kl7ukk2pahl520susce6rgq3.apps.googleusercontent.com';
+        $clientSecret = 'XkBlTGkER48vKOS-6cwA6Lni';
         $redirectUrl = base_url() . 'google/';
+        
+        
+        
+//        $config['googleplus']['application_name'] = 'liveone-158304';
+//        $config['googleplus']['client_id']        = '415940856583-31ecmf41kl7ukk2pahl520susce6rgq3.apps.googleusercontent.com';
+//        $config['googleplus']['client_secret']    = 'XkBlTGkER48vKOS-6cwA6Lni';  
+//        $config['googleplus']['redirect_uri']     = 'https://accounts.google.com/o/oauth2/auth';
+//        $config['googleplus']['api_key']          = 'https://accounts.google.com/o/oauth2/token';
+//        $config['googleplus']['scopes']           = array();
+        
+        
+        
+        
+        
+        
+        
+        
 
         // Google Client Configuration
         $gClient = new Google_Client();
@@ -70,6 +87,7 @@ class User_Authentication extends CI_Controller {
         else {
             $data['authUrl'] = $gClient->createAuthUrl();
         }
+        
         $this->load->view('user_authentication/index', $data);
     }
 
