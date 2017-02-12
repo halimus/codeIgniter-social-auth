@@ -4,95 +4,73 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Google extends CI_Controller {
 
-    /*
-     * http://www.codexworld.com/login-with-google-account-in-codeigniter/
+    /**
+     *
+     * 
      */
     function __construct() {
         parent::__construct();
-        // Load user model
-        $this->load->model('user');
+        //https://github.com/moemoe89/google-login-ci3
+        // http://www.codexworld.com/login-with-google-account-in-codeigniter/    => Google Project Creation 
     }
 
-    /*
-     * 
+    /**
+     *
      */
     public function index() {
-        // Include the google api php libraries
-        include_once APPPATH . "libraries/google-api-php-client/Google_Client.php";
-        include_once APPPATH . "libraries/google-api-php-client/contrib/Google_Oauth2Service.php";
 
-        // Google Project API Credentials
-        $clientId = '415940856583-31ecmf41kl7ukk2pahl520susce6rgq3.apps.googleusercontent.com';
-        $clientSecret = 'XkBlTGkER48vKOS-6cwA6Lni';
-        $redirectUrl = base_url() . 'google/';
-        
-        
-        
-//        $config['googleplus']['application_name'] = 'liveone-158304';
-//        $config['googleplus']['client_id']        = '415940856583-31ecmf41kl7ukk2pahl520susce6rgq3.apps.googleusercontent.com';
-//        $config['googleplus']['client_secret']    = 'XkBlTGkER48vKOS-6cwA6Lni';  
-//        $config['googleplus']['redirect_uri']     = 'https://accounts.google.com/o/oauth2/auth';
-//        $config['googleplus']['api_key']          = 'https://accounts.google.com/o/oauth2/token';
-//        $config['googleplus']['scopes']           = array();
-        
-        
-
-        // Google Client Configuration
-        $gClient = new Google_Client();
-        $gClient->setApplicationName('Login to codexworld.com');
-        $gClient->setClientId($clientId);
-        $gClient->setClientSecret($clientSecret);
-        $gClient->setRedirectUri($redirectUrl);
-        $google_oauthV2 = new Google_Oauth2Service($gClient);
-
-        if (isset($_REQUEST['code'])) {
-            $gClient->authenticate();
-            $this->session->set_userdata('token', $gClient->getAccessToken());
-            redirect($redirectUrl);
+        if ($this->session->userdata('login') == true) {
+            redirect('google/profile');
         }
 
-        $token = $this->session->userdata('token');
-        if (!empty($token)) {
-            $gClient->setAccessToken($token);
+        if (isset($_GET['code'])) {
+
+            $this->googleplus->getAuthenticate();
+            $this->session->set_userdata('login', true);
+            $this->session->set_userdata('user_profile', $this->googleplus->getUserInfo());
+            redirect('google/profile');
         }
 
-        if ($gClient->getAccessToken()) {
-            $userProfile = $google_oauthV2->userinfo->get();
-            // Preparing data for database insertion
-            $userData['oauth_provider'] = 'google';
-            $userData['oauth_uid'] = $userProfile['id'];
-            $userData['first_name'] = $userProfile['given_name'];
-            $userData['last_name'] = $userProfile['family_name'];
-            $userData['email'] = $userProfile['email'];
-            $userData['gender'] = $userProfile['gender'];
-            $userData['locale'] = $userProfile['locale'];
-            $userData['profile_url'] = $userProfile['link'];
-            $userData['picture_url'] = $userProfile['picture'];
-            // Insert or update user data
-            $userID = $this->user->checkUser($userData);
-            if (!empty($userID)) {
-                $data['userData'] = $userData;
-                $this->session->set_userdata('userData', $userData);
-            } 
-            else {
-                $data['userData'] = array();
-            }
-        } 
-        else {
-            $data['authUrl'] = $gClient->createAuthUrl();
-        }
+        $contents['login_url'] = $this->googleplus->loginURL();
+        //$this->load->view('welcome_message', $contents);
+
+
+        $this->load->view('includes/header');
+        $this->load->view('google/login', $contents);
+        $this->load->view('includes/footer'); 
         
-        $this->load->view('google/index', $data);
     }
 
-    /*
-     * 
+    /**
+     *
+     */
+    public function profile() {
+        if ($this->session->userdata('login') != true) {
+            redirect('google');
+        }
+
+        $contents['user_profile'] = $this->session->userdata('user_profile');
+        //$this->load->view('google/profile', $contents);
+        
+        //echo '<pre>';
+        //print_r($contents['user_profile']);
+        //echo '</pre>';
+        
+        $this->load->view('includes/header');
+        $this->load->view('google/profile', $contents);
+        $this->load->view('includes/footer'); 
+        
+    }
+
+    /**
+     * Logout for web redirect example
+     *
+     * @return  [type]  [description]
      */
     public function logout() {
-        $this->session->unset_userdata('token');
-        $this->session->unset_userdata('userData');
         $this->session->sess_destroy();
-        redirect('/google');
+        $this->googleplus->revokeToken();
+	redirect('google');
     }
 
 }
