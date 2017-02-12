@@ -36,12 +36,6 @@ class Google extends CI_Controller {
 //        $config['googleplus']['scopes']           = array();
         
         
-        
-        
-        
-        
-        
-        
 
         // Google Client Configuration
         $gClient = new Google_Client();
@@ -88,7 +82,7 @@ class Google extends CI_Controller {
             $data['authUrl'] = $gClient->createAuthUrl();
         }
         
-        $this->load->view('user_authentication/index', $data);
+        $this->load->view('google/index', $data);
     }
 
     /*

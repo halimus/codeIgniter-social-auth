@@ -28,7 +28,7 @@
                 }
             ?>
             <div id="is_logout" style="<?php if(@$connected) echo 'display:none';?>">
-                <button type="button" class="btn btn-primary" id="login">Login</button>
+                <button type="button" class="btn btn-primary" id="login">Connect with facebook</button>
             </div>
 
 

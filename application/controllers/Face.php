@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends CI_Controller {
+class Face extends CI_Controller {
 
     /**
      *
@@ -35,7 +35,7 @@ class Auth extends CI_Controller {
         
         
         $this->load->view('includes/header', $data);
-        $this->load->view('auth/login_js');
+        $this->load->view('facebook/login_js');
         $this->load->view('includes/footer'); 
     }
     
@@ -58,7 +58,7 @@ class Auth extends CI_Controller {
     public function logout() {
         $this->facebook->destroy_session();
         //die('logout');
-        redirect('auth', redirect);
+        redirect('face', redirect);
     }
     
 }
